@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 const {ApolloServer, gql} = require('apollo-server-express')
+const typeDefs = require('../graphql/typeDefs');
+const resolvers = require('../graphql/resolvers');
+
 
 /**
  * Module dependencies.
@@ -19,19 +22,7 @@ app.set('port', port);
 /**
  * Create HTTP server.
  */
- // Construct a schema, using GraphQL schema language
- const typeDefs = gql`
-   type Query {
-     hello: String
-   }
- `;
 
- // Provide resolver functions for your schema fields
- const resolvers = {
-   Query: {
-     hello: () => 'Hello world!',
-   },
- };
 var server = http.createServer(app);
 const apollo = new ApolloServer({ typeDefs, resolvers });
 const homePath = '/graphql'
