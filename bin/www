@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 const {ApolloServer, gql} = require('apollo-server-express')
+const {MongoClient, ObjectId} = require('mongodb')
 const typeDefs = require('../graphql/typeDefs');
-const resolvers = require('../graphql/resolvers');
-
+const resolversFunc = require('../graphql/resolvers');
 
 /**
  * Module dependencies.
@@ -15,34 +15,46 @@ var http = require('http');
 /**
  * Get port from environment and store in Express.
  */
-
-var port = normalizePort(process.env.PORT || '3000');
-app.set('port', port);
-
-/**
- * Create HTTP server.
- */
+const MONGO_URL = 'mongodb://localhost:27017/blog';
 
 var server = http.createServer(app);
-const apollo = new ApolloServer({ typeDefs, resolvers });
-const homePath = '/graphql'
-const URL = 'http://localhost'
-apollo.applyMiddleware({ app });
-// app.listen(port, () => {
-//   console.log(`Visits ${URL}:${port}${homePath}`)
-// })
-/**
- * Listen on provided port, on all network interfaces.
- */
 
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+  try {
+    // const db = await MongoClient.connect(MONGO_URL, { useUnifiedTopology: true },(err, client)=>{
+   MongoClient.connect(MONGO_URL, { useUnifiedTopology: true },(err, client)=>{
+      const db = client.db('blog');
+      const Posts = db.collection('posts')
+      const Comments = db.collection('comments')
+      const resolvers = resolversFunc(Posts, Comments)
 
+      var port = normalizePort(process.env.PORT || '3000');
+      app.set('port', port);
+
+      /**
+       * Create HTTP server.
+       */
+
+      const apollo = new ApolloServer({ typeDefs, resolvers });
+      apollo.applyMiddleware({ app });
+      /**
+       * Listen on provided port, on all network interfaces.
+       */
+
+      server.listen(port);
+      server.on('error', onError);
+      server.on('listening', onListening);
+
+    })
+  } catch (e) {
+    console.log(e);
+  } finally {
+
+  }
+// }
+// start()
 /**
  * Normalize a port into a number, string, or false.
  */
-
 function normalizePort(val) {
   var port = parseInt(val, 10);
 
