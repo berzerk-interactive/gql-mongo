@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 const {ApolloServer, gql} = require('apollo-server-express')
-const {MongoClient, ObjectId} = require('mongodb')
+const {MongoClient} = require('mongodb')
 const typeDefs = require('../graphql/typeDefs');
 const resolversFunc = require('../graphql/resolvers');
 
@@ -20,7 +20,6 @@ const MONGO_URL = 'mongodb://localhost:27017/blog';
 var server = http.createServer(app);
 
   try {
-    // const db = await MongoClient.connect(MONGO_URL, { useUnifiedTopology: true },(err, client)=>{
    MongoClient.connect(MONGO_URL, { useUnifiedTopology: true },(err, client)=>{
       const db = client.db('blog');
       const Posts = db.collection('posts')

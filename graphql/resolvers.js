@@ -1,4 +1,5 @@
 const prepare = require("../util/index")
+const {ObjectId} = require('mongodb')
 
 function resolversFunc(Posts, Comments) {
   return {
@@ -30,7 +31,7 @@ function resolversFunc(Posts, Comments) {
       },
       createComment: async (root, args) => {
         const res = await Comments.insert(args)
-        return prepare(await Comments.findOne({_id: res.insertedIds[1]}))
+        return prepare(await Comments.findOne({_id: res.insertedIds[0]}))
       },
     },
   }
