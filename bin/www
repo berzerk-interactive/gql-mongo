@@ -15,7 +15,7 @@ var http = require('http');
 /**
  * Get port from environment and store in Express.
  */
-const MONGO_URL = 'mongodb://localhost:27017/blog';
+const MONGO_URL = 'mongodb://localhost:27017';
 
 var server = http.createServer(app);
 
