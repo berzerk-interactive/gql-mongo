@@ -1,0 +1,250 @@
+{
+	"info": {
+		"_postman_id": "690d4f1b-f46e-49ef-9f45-72a6fc493a94",
+		"name": "gql-mongo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "MUTATION createPost",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "7a5e94c5-4ecd-458b-b453-9a1f1816ced4",
+						"exec": [
+							"pm.environment.set(\"name\", '{{$randomBsBuzz}}');",
+							"pm.environment.set(\"content\", '{{$randomBs}}');"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "ebc19388-e3bb-4b52-a6f5-1b891b68092c",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Set env data\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.environment.set(\"postId\", jsonData.data.createPost._id);",
+							"    pm.environment.set(\"title\", jsonData.data.createPost.title);",
+							"    pm.environment.set(\"post_content\", jsonData.data.createPost.content);",
+							"    const keys = [\"_id\",\"title\",\"content\"]",
+							"    keys.forEach(key => {",
+							"        pm.expect(jsonData.data.createPost[key]).to.be.string;",
+							"    })",
+							"",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation make($title: String, $content: String) {\n  createPost(title:$title,content:$content) {\n    _id\n    title\n    content\n  }\n}",
+						"variables": "{\n\t\"title\":\"{{name}}\",\n\t\"content\":\"{{content}}\"\n}"
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "MUTATION createComment",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "fbd0faac-12b6-4c88-804c-4be3414306b7",
+						"exec": [
+							"pm.environment.set(\"name\", '{{$randomBsBuzz}}');",
+							"pm.environment.set(\"content\", '{{$randomBs}}');"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "48ef4282-48fc-4368-9fa2-5c504158687a",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Check data\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data.createComment.content).to.be.string;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation make($postId: String, $content: String) {\n  createComment(postId:$postId,content:$content) {\n    content\n  }\n}",
+						"variables": "{\n\t\"postId\":\"{{postId}}\",\n\t\"content\":\"{{content}}\"\n}"
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query POSTS",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "19f3ccc6-6d47-43d9-9353-12bf1ffc4b38",
+						"exec": [
+							"pm.variables.replaceIn('{{$randomFirstName}}')",
+							"",
+							"pm.globals.set(\"name\", '{{$randomfirstname}}');"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "71716d84-52dd-4b65-9f16-a455122c6ebd",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"check data\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data.posts.length).to.be.above(0);",
+							"        const keys = [\"_id\",\"title\",\"content\"]",
+							"    keys.forEach(key => {",
+							"        pm.expect(jsonData.data.posts[0][key]).to.be.string;",
+							"    })",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "{\n    posts {\n        _id,\n        title,\n        content,\n        comments {\n            _id\n            content\n        }\n    }\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query POST by ID",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "69bf0b4d-c07d-4d2d-9f57-e55c4c7602d2",
+						"exec": [
+							"pm.variables.replaceIn('{{$randomFirstName}}')",
+							"",
+							"pm.globals.set(\"name\", '{{$randomfirstname}}');"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "9ec9bb03-16ca-4dec-af8c-255ff2050458",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Check response\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data.post.title).to.be.string;",
+							"    pm.expect(jsonData.data.post._id).to.eql(pm.environment.get(\"postId\").toString());",
+							"        const keys = [\"_id\",\"title\",\"content\"]",
+							"    keys.forEach(key => {",
+							"        pm.expect(jsonData.data.post[key]).to.be.string;",
+							"    })",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query($postId: String) {\n    post(_id:$postId) {,\n        _id\n       title\n       content,\n       comments{\n           _id\n           content\n       }\n    }\n}",
+						"variables": "{\n\t\"postId\":\"{{postId}}\"\n}"
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
