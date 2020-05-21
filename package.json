@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node ./bin/www",
     "test": "npm run newman:local",
-    "newman:local":"newman run postman/gql-mongo.postman_collection.json"
+    "newman:local": "newman run postman/gql-mongo.postman_collection.json"
   },
   "devDependencies": {},
   "dependencies": {
@@ -18,6 +18,7 @@
     "graphql": "^15.0.0",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
+    "mongo-mock": "^4.0.0",
     "mongodb": "^3.5.7",
     "morgan": "~1.9.1",
     "newman": "^5.0.1",

@@ -3,7 +3,7 @@ const {ApolloServer, gql} = require('apollo-server-express')
 const {MongoClient} = require('mongodb')
 const typeDefs = require('../graphql/typeDefs');
 const resolversFunc = require('../graphql/resolvers');
-
+// const {MongoClient} =require('mongo-mock');
 /**
  * Module dependencies.
  */
@@ -16,7 +16,7 @@ var http = require('http');
  * Get port from environment and store in Express.
  */
 const MONGO_URL = 'mongodb://localhost:27017';
-
+MongoClient.persist="mongo.js";//persist the data to disk
 var server = http.createServer(app);
 
   try {
