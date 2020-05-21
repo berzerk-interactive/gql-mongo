@@ -15,10 +15,12 @@
     "cors": "^2.8.5",
     "debug": "~2.6.9",
     "express": "~4.16.1",
+    "graphql": "^15.0.0",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
     "mongodb": "^3.5.7",
     "morgan": "~1.9.1",
+    "newman": "^5.0.1",
     "nodemon": "^1.18.3"
   }
 }
