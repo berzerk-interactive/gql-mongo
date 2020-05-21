@@ -9,3 +9,6 @@
 7. You can test with the included postman tests "npm test"
 
 NOTE: this used express-generator to create the inital project
+
+Here is a quick video run down of the project:
+[![Everything Is AWESOME](https://img.youtube.com/vi/4cS6DE2k93k/0.jpg)](https://www.youtube.com/watch?v=4cS6DE2k93k&feature=youtu.be "Example Run Down")
